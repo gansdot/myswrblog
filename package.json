@@ -5,11 +5,44 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "mock-server": "json-server --watch ./db.json -p 4001 -d 2000"
   },
   "dependencies": {
+    "@types/mongodb": "^3.5.4",
+    "@zeit/next-css": "^1.0.1",
+    "bootstrap": "^4.4.1",
+    "formik": "^2.1.4",
+    "isomorphic-unfetch": "^3.0.0",
+    "mongodb": "^3.5.5",
     "next": "9.3.4",
+    "next-connect": "^0.6.1",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
-  }
+    "react-avatar": "^3.9.2",
+    "react-bootstrap": "^1.0.0",
+    "react-dom": "16.13.1",
+    "react-image-file-resizer": "^0.2.1",
+    "swr": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.11.0",
+    "@types/react": "^16.9.32",
+    "json-server": "^0.15.1",
+    "typescript": "^3.8.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gansdot/myswrblog.git"
+  },
+  "keywords": [
+    "blog",
+    "codeblog",
+    "myswrblog"
+  ],
+  "author": "Ganesan Mariappan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gansdot/myswrblog/issues"
+  },
+  "homepage": "https://github.com/gansdot/myswrblog#readme"
 }
