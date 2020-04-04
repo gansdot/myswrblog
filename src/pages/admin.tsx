@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import BlogInput from "../components/bloginput";
+import Router from "next/router";
 
 const Admin = () => {
   const url = "http://localhost:3000/api/";
@@ -64,9 +65,8 @@ const Admin = () => {
       author.value.length !== 0
     ) {
       setValidated(false);
-
       persistBlog();
-      //setShow(true);
+      Router.push("/");
     } else {
       setValidated(true);
       event?.preventDefault();
