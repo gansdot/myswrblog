@@ -24,10 +24,12 @@ const Navigation = () => {
                 </Navbar.Brand>
               </Link>
 
-              <Link href="/post/[id]" as="/post/1">
+              <Link href="/post/[id]" as="/post/0">
                 <a className="nav-link">Posts</a>
               </Link>
-
+              <Link href="/admin">
+                <a className="nav-link">Create</a>
+              </Link>
               <NavDropdown title="Learn" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">DevOps</NavDropdown.Item>
                 <NavDropdown.Item href="#action/3.2">ReactJs</NavDropdown.Item>
@@ -38,9 +40,6 @@ const Navigation = () => {
                 </NavDropdown.Item>
               </NavDropdown>
 
-              <Link href="/admin">
-                <a className="nav-link">Admin</a>
-              </Link>
               <Link href="/about">
                 <a className="nav-link">About</a>
               </Link>

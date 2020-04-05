@@ -9,9 +9,9 @@ const HomeImage = ({ blog }: { blog: Blog }) => {
         width={220}
         height={145}
         alt="220x145"
-        src={blog.blogImage}
+        src={blog === null ? "holder.js/220x145" : blog?.blogImage}
       />
-      <Figure.Caption>{blog.blogTitle}</Figure.Caption>
+      <Figure.Caption>{blog?.blogTitle}</Figure.Caption>
     </Figure>
   );
 };

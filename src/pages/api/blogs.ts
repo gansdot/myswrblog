@@ -2,6 +2,12 @@ import nextConnect from "next-connect";
 import middleware from "../../middleware/database";
 import fs from "fs";
 import { BlogApiRequest, BlogApiResponse, Blog } from "./blogtype";
+import Cors from "cors";
+
+// Initializing the cors middleware
+const cors = Cors({
+  methods: ["GET", "HEAD", "POST"],
+});
 
 const handler = nextConnect();
 
@@ -39,6 +45,7 @@ handler.get(async (request: BlogApiRequest, response: BlogApiResponse) => {
     console.log(error);
   }
   response.status(200);
+  response.setHeader("Set-Cookie", "HttpOnly;Secure;SameSite=Strict");
   response.json(JSON.stringify(result));
 });
 

@@ -20,6 +20,11 @@ export interface BlogProps {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+export interface PostProps {
+  id: number;
+  blog?: Blog[];
+}
+
 export interface BlogApiRequest extends NextApiRequest {
   db: any;
   bucket: GridFSBucket;

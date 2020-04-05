@@ -9,10 +9,13 @@
     "mock-server": "json-server --watch ./db.json -p 4001 -d 2000"
   },
   "dependencies": {
+    "@types/cors": "^2.8.6",
     "@types/mongodb": "^3.5.4",
     "@zeit/next-css": "^1.0.1",
     "bootstrap": "^4.4.1",
+    "cors": "^2.8.5",
     "formik": "^2.1.4",
+    "holderjs": "^2.9.6",
     "isomorphic-unfetch": "^3.0.0",
     "mongodb": "^3.5.5",
     "next": "9.3.4",

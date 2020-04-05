@@ -5,13 +5,13 @@ import { Blog } from "../pages/api/blogtype";
 const HomeImage = ({ blog }: { blog: Blog }) => {
   return (
     <Figure>
-      <Figure.Caption>{blog.blogTitle}</Figure.Caption>
+      <Figure.Caption>{blog?.blogTitle}</Figure.Caption>
 
       <Figure.Image
-        width={340}
-        height={230}
+        width={600}
+        height={390}
         alt="220x145"
-        src={blog.blogImage}
+        src={blog?.blogImage}
       />
     </Figure>
   );

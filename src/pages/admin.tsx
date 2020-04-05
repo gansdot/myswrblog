@@ -1,7 +1,7 @@
 import React, { useState, useEffect, MouseEvent } from "react";
 import Alert from "react-bootstrap/Alert";
 import fetch from "isomorphic-unfetch";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { Blog } from "../pages/api/blogtype";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -9,7 +9,6 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import BlogInput from "../components/bloginput";
-import Router from "next/router";
 
 const Admin = () => {
   const url = "http://localhost:3000/api/";
@@ -49,6 +48,7 @@ const Admin = () => {
           isBinary: false,
         }),
       });
+      //mutate(url);
       const result = await response.json();
     } catch (error) {
       console.log(error);
@@ -66,7 +66,6 @@ const Admin = () => {
     ) {
       setValidated(false);
       persistBlog();
-      Router.push("/");
     } else {
       setValidated(true);
       event?.preventDefault();
