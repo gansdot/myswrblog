@@ -9,24 +9,28 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import BlogInput from "../components/bloginput";
+import BlogEditor from "../components/blogeditor";
+import { NextPage } from "next";
 
-const Admin = () => {
+const Admin: NextPage = () => {
   const url = "http://localhost:3000/api/";
   const { data } = useSWR(url + "blogs");
   const [blog, setBlog] = useState<Blog>();
   const [show, setShow] = useState(false);
+  const [content, setContent] = useState("");
   const [validated, setValidated] = useState(false);
   const filemsg =
     "For higher resolution, select Image checkbox and paste the file path here.";
+
   const blogTitle = useFormInput("", "Title", true);
   const blogCategory = useFormInput("", "Category", true);
   const author = useFormInput("", "Author", true);
   const image = useFormInput("", "Image", true);
-  const blogText = useFormInput("", "Description", true);
+  //const blogText = useFormInput("", "Description", true);
   const slug = useFormInput("", "Tag", false);
 
   const [variant, setVariant] = useState("success");
-
+  const [message, setMessage] = useState({});
   const persistBlog = async () => {
     try {
       const response = await fetch(url + "upload", {
@@ -43,17 +47,25 @@ const Admin = () => {
           author: author.value,
           slug: slug.value,
           blogCategory: blogCategory.value,
-          blogText: blogText.value,
+          blogText: content,
           image: image.value,
           isBinary: false,
         }),
       });
       //mutate(url);
-      const result = await response.json();
+      const raw = await response.json();
+      setMessage(JSON.stringify(raw));
+      setShow(true);
+      console.log("Response " + JSON.stringify(raw, null, 2));
     } catch (error) {
-      console.log(error);
+      console.log("Client error " + error);
     }
   };
+
+  function onEditorChange(value: string) {
+    console.log("this is html string --> " + value);
+    setContent(value);
+  }
 
   function handleSubmit(event: MouseEvent<HTMLButtonElement> | undefined) {
     console.log("hello event 1 " + image.value.length);
@@ -61,7 +73,7 @@ const Admin = () => {
     if (
       image.value.length !== 0 &&
       blogTitle.value.length !== 0 &&
-      blogText.value.length !== 0 &&
+      //blogText.value.length !== 0 &&
       author.value.length !== 0
     ) {
       setValidated(false);
@@ -81,9 +93,11 @@ const Admin = () => {
           <BlogInput {...blogCategory} />
           <BlogInput {...blogTitle} />
           <BlogInput {...author} />
-          <BlogInput {...slug} />
+          {/* <BlogInput {...slug} /> */}
           <BlogInput {...image} />
-          <BlogInput {...blogText} />
+          {/* <BlogInput {...blogText} /> */}
+          <BlogEditor onEditorChange={onEditorChange} />
+
           <Button
             className="btn-block"
             onClick={(e: React.MouseEvent<HTMLButtonElement>) =>

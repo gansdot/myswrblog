@@ -20,7 +20,7 @@ handler.get(async (request: BlogApiRequest, response: BlogApiResponse) => {
       .collection("blogpost")
       .find()
       .sort({ postedOn: -1 })
-      .limit(5)
+      //.limit(5)
       .toArray();
 
     //extract image file

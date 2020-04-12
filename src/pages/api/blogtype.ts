@@ -1,5 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { MongoClient, GridFSBucket } from "mongodb";
+import { MongoClient, GridFSBucket, ObjectId } from "mongodb";
+import dynamic from "next/dynamic";
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export interface Blog {
   id?: number;
@@ -20,10 +22,19 @@ export interface BlogProps {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export interface PostProps {
+export interface BlogEditorProps {
+  onEditorChange: (value: string) => void;
+}
+
+export interface BlogEditorState {
+  editorHtml: string;
+  //quill: any;
+}
+
+export type PostProps = {
   id: number;
   blog?: Blog[];
-}
+};
 
 export interface BlogApiRequest extends NextApiRequest {
   db: any;

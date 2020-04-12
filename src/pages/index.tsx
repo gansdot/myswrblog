@@ -13,6 +13,8 @@ const url = "http://localhost:3000/api/";
 const Home = () => {
   const { data, error } = useSWR(url + "blogs");
 
+  useEffect(() => {});
+
   if (!data) return <div>Loading..</div>;
   if (error) return <div>Error..</div>;
 

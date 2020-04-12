@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { useRouter } from "next/router";
 import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
@@ -15,6 +15,7 @@ const url = "http://localhost:3000/api/";
 const Index = () => {
   const router = useRouter();
   let { id } = router.query;
+  let content = { __html: {} };
 
   console.log("this is id " + JSON.stringify(router.query));
 
@@ -25,9 +26,11 @@ const Index = () => {
   return <DisplayPost id={+id} blog={data} />;
 };
 
-const DisplayPost: React.FC<PostProps> = ({ id, blog }) => {
+const DisplayPost: FC<PostProps> = ({ id, blog }) => {
   console.log("in display " + id);
-
+  function createMarkup(value: string) {
+    return { __html: value };
+  }
   let sb = id !== 0 ? blog?.filter((b) => b.id == id)[0] : blog?.[0];
   console.log(sb);
   return (
@@ -36,11 +39,11 @@ const DisplayPost: React.FC<PostProps> = ({ id, blog }) => {
         <Row>
           <Col md={8}>
             <Row className="blogheading">
-              <span>{sb?.blogTitle}</span>
+              <span>{sb?.blogTitle.substring(0, 50)}</span>
             </Row>
             <Row>
               <div style={{ textAlign: "right", margin: "8px 2px" }}>
-                <Avatar facebookId="1570197833" size="60" round={true} />
+                <Avatar facebookId="1570197833" size="50" round={true} />
               </div>
               <Col sm={10}>
                 <Row>
@@ -55,37 +58,76 @@ const DisplayPost: React.FC<PostProps> = ({ id, blog }) => {
               <img width={600} height={390} src={"/" + sb?.blogImage} />
             </Row>
             <Row>
-              <div style={{ width: "96%" }}>
-                <p className="cardText">{sb?.blogText}</p>
+              <div
+                style={{
+                  width: "96%",
+                  height: 150,
+                  overflowY: "visible",
+                  marginTop: 10,
+                }}
+              >
+                <div
+                  dangerouslySetInnerHTML={createMarkup(
+                    sb?.blogText ? sb.blogText : ""
+                  )}
+                />
               </div>
             </Row>
           </Col>
+          {/* <Col md={1} /> */}
           <Col md={4}>
             <Row>
-              <div style={{ height: "40px" }}></div>
+              <div style={{ height: "60px" }}></div>
             </Row>
             <Row>
-              <div className="d-inline p-2 bg-dark text-white ">
-                More from CodeGans
+              <div style={{ paddingLeft: "32px" }}>
+                <span className="d-block pl-5 pr-5 bg-dark text-white">
+                  More from <br></br> CodeGans
+                </span>
               </div>
             </Row>
-            {blog?.map((b) => (
-              <Row key={b.id}>
+
+            <Row>
+              <div className="main">
+                {blog?.map((b, index) => (
+                  <>
+                    <div className="sideBarHeading" key={b.id}>
+                      {/* <div>{b.blogTitle.substring(0, 13)}</div> */}
+                      <div>
+                        <Link
+                          key={index}
+                          href="/post/[id]"
+                          as={`/post/${b.id}`}
+                        >
+                          <a>{b.blogTitle.substring(0, 15)}</a>
+                        </Link>
+                      </div>
+                      <img src={"/" + b.blogImage} width="60px" height="40px" />
+                    </div>
+                  </>
+                ))}
+              </div>
+            </Row>
+
+            {/* {blog?.map((b) => (
+              <Row key={b.id} className="border border-primary">
                 <div className="sideBarHeading" key={b.id}>
                   <img
                     key={b.blogTitle}
-                    style={{ float: "left" }}
+                    //style={{ float: "left" }}
                     className="img-fluid img-thumbnail"
                     src={"/" + b.blogImage}
                     width="66"
                     height="42"
                   />
                   <Link key={b.id} href="/post/[id]" as={`/post/${b.id}`}>
-                    <a>{b.blogTitle}</a>
+                    <a className="moreLink">
+                      {b.blogTitle.substring(0, 25)}...
+                    </a>
                   </Link>
                 </div>
               </Row>
-            ))}
+            ))} */}
           </Col>
         </Row>
       </Container>

@@ -98,13 +98,20 @@ handler.post(
             response.end("ok");
           });
       } else {
-        throw new Error(`${file} is not valid file. check file path`);
+        return response.json({
+          status: "error",
+          message: "invalid file input",
+        });
+
+        //throw new Error(`${file} is not valid file. check file path`);
+        //response.statusCode = 404;
+        //response.json({ message: "invalid file input" });
+        //response.end("NotOk");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error on Invalid File :" + error);
       response.statusCode = 404;
-      response.json({ message: "invalid file input" });
-      response.end("NotOk");
+      return response.json({ status: "error", message: "invalid file input" });
     }
   }
 );

@@ -28,9 +28,11 @@ export default class MyApp extends App {
     return (
       <React.Fragment>
         <Head>
-          <title>My page</title>
+          <title>My Blog</title>
+
           <meta
             name="viewport"
+            charSet="utf-8"
             content="minimum-scale=1, initial-scale=1, width=device-width"
           />
         </Head>
