@@ -52,7 +52,9 @@ const Navigation = () => {
                 className="mr-sm-3"
               />
 
-              <Button className="btn btn-success btn-sm">Search</Button>
+              <Button size="sm" variant="outline-success">
+                Search
+              </Button>
             </Form>
           </Navbar.Collapse>
         </Container>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import useSWR from "swr";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -7,15 +7,21 @@ import "../css/styles.css";
 import { Blog } from "./api/blogtype";
 import HomeImage from "../components/homeimage";
 import SideImage from "../components/sideimage";
+import { NextPage } from "next";
+import BlogSpinner from "../components/spinner";
 
-const url = "http://localhost:3000/api/";
-
-const Home = () => {
-  const { data, error } = useSWR(url + "blogs");
+const Home: NextPage = () => {
+  const { data, error } = useSWR("/api/blogs");
 
   useEffect(() => {});
 
-  if (!data) return <div>Loading..</div>;
+  if (!data) return <BlogSpinner />;
+  if (data?.length === 0)
+    return (
+      <div>
+        <h2>No Data...</h2>
+      </div>
+    );
   if (error) return <div>Error..</div>;
 
   return <DisplayBlog blog={data} />;

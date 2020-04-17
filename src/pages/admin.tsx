@@ -1,8 +1,7 @@
 import React, { useState, useEffect, MouseEvent } from "react";
-import Alert from "react-bootstrap/Alert";
 import fetch from "isomorphic-unfetch";
 import useSWR, { mutate } from "swr";
-import { Blog } from "../pages/api/blogtype";
+import { Blog, Status } from "../pages/api/blogtype";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -11,12 +10,12 @@ import Col from "react-bootstrap/Col";
 import BlogInput from "../components/bloginput";
 import BlogEditor from "../components/blogeditor";
 import { NextPage } from "next";
+import Alert from "react-bootstrap/Alert";
 
 const Admin: NextPage = () => {
-  const url = "http://localhost:3000/api/";
-  const { data } = useSWR(url + "blogs");
+  //const url = "http://localhost:3000/api/";
+  const { data } = useSWR("/api/blogs");
   const [blog, setBlog] = useState<Blog>();
-  const [show, setShow] = useState(false);
   const [content, setContent] = useState("");
   const [validated, setValidated] = useState(false);
   const filemsg =
@@ -28,12 +27,17 @@ const Admin: NextPage = () => {
   const image = useFormInput("", "Image", true);
   //const blogText = useFormInput("", "Description", true);
   const slug = useFormInput("", "Tag", false);
+  const [message, setMessage] = useState<Status>({
+    style: "primary",
+    message: "",
+    status: "",
+  });
+  const [show, setShow] = useState(false);
+  const [disable, setDisable] = useState(false);
 
-  const [variant, setVariant] = useState("success");
-  const [message, setMessage] = useState({});
   const persistBlog = async () => {
     try {
-      const response = await fetch(url + "upload", {
+      const response = await fetch("/api/upload", {
         mode: "no-cors",
         method: "POST",
         headers: {
@@ -54,8 +58,9 @@ const Admin: NextPage = () => {
       });
       //mutate(url);
       const raw = await response.json();
-      setMessage(JSON.stringify(raw));
       setShow(true);
+      setMessage(raw);
+      setDisable(false);
       console.log("Response " + JSON.stringify(raw, null, 2));
     } catch (error) {
       console.log("Client error " + error);
@@ -76,6 +81,13 @@ const Admin: NextPage = () => {
       //blogText.value.length !== 0 &&
       author.value.length !== 0
     ) {
+      setDisable(true);
+      setShow(true);
+      setMessage({
+        style: "warning",
+        status: "being processed....",
+        message: "please wait....",
+      });
       setValidated(false);
       persistBlog();
     } else {
@@ -89,6 +101,30 @@ const Admin: NextPage = () => {
     <>
       <h3 style={{ paddingLeft: "15px" }}>Blog Writing Administrator</h3>
       <Container className="p-3" fluid={true}>
+        <>
+          <Alert show={show} variant={message.style}>
+            <Alert.Heading>Your blog {message.status}</Alert.Heading>
+            <Row>
+              <Col>
+                <p>{message.message}</p>
+              </Col>
+              <Col>
+                <div className="d-flex justify-content-end">
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setShow(false);
+                    }}
+                    variant={message.style}
+                  >
+                    Close
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          </Alert>
+        </>
+
         <Form noValidate validated={validated}>
           <BlogInput {...blogCategory} />
           <BlogInput {...blogTitle} />
@@ -99,51 +135,16 @@ const Admin: NextPage = () => {
           <BlogEditor onEditorChange={onEditorChange} />
 
           <Button
-            className="btn-block"
+            disabled={disable}
+            className="btn btn-secondary btn-block"
             onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
               handleSubmit(e)
             }
           >
             Save Blog
           </Button>
-
-          {/* 
-          {!show && (
-           
-          )} */}
         </Form>
       </Container>
-
-      <Alert show={show} className={variant}>
-        <Alert.Heading>Your blog data</Alert.Heading>
-        <Row>
-          <Col>
-            <p> {""}</p>
-          </Col>
-          <Col>
-            <div className="d-flex justify-content-end">
-              <Button
-                onClick={() => {
-                  //setShow(false);
-                  //   setBlog({
-                  //     id: "",
-                  //     blogCategory: "",
-                  //     blogTitle: "",
-                  //     slug: "",
-                  //     postedOn: "",
-                  //     author: "",
-                  //     blogImage: "",
-                  //     blogText: "",
-                  //   });
-                }}
-                variant="outline-success"
-              >
-                Close me
-              </Button>
-            </div>
-          </Col>
-        </Row>
-      </Alert>
     </>
   );
 };

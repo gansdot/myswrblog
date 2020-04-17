@@ -11,6 +11,7 @@ const HomeImage = ({ blog }: { blog: Blog }) => {
         width={600}
         height={390}
         alt="220x145"
+        className="img-fluid"
         src={blog?.blogImage}
       />
     </Figure>

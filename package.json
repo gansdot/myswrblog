@@ -17,6 +17,7 @@
     "formik": "^2.1.4",
     "holderjs": "^2.9.6",
     "isomorphic-unfetch": "^3.0.0",
+    "moment": "^2.24.0",
     "mongodb": "^3.5.5",
     "next": "9.3.4",
     "next-connect": "^0.6.1",

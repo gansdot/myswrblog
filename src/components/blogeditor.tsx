@@ -5,8 +5,6 @@ import "react-quill/dist/quill.snow.css";
 import { BlogEditorProps, BlogEditorState } from "../pages/api/blogtype";
 
 class BlogEditor extends React.Component<BlogEditorProps, BlogEditorState> {
-  //state: { editorHtml: string };
-
   placeholder: any;
   onEditorChange: any;
   quill: any;
@@ -128,6 +126,7 @@ class BlogEditor extends React.Component<BlogEditorProps, BlogEditorState> {
           placeholder={"here you go with your content"}
           modules={this.modules}
           formats={this.formats}
+          theme="snow"
         />
       </div>
     );

@@ -25,23 +25,23 @@ handler.get(
         .toArray();
 
       //extract image file
-      result.map((data: Blog) => {
-        //console.log(data.blogImage);
-        request.bucket
-          .openDownloadStreamByName(data.blogImage)
-          .pipe(fs.createWriteStream("./public/" + data.blogImage))
-          .on("error", function (error) {
-            console.log("error");
-            response.status(500).end();
-          })
-          .on("end", function () {
-            console.log("done!");
-            //response.send("time.jpg");
-            //response.end();
-            //next(response);
-            //next(response);
-          });
-      });
+      // result.map((data: Blog) => {
+      //   //console.log(data.blogImage);
+      //   request.bucket
+      //     .openDownloadStreamByName(data.blogImage)
+      //     .pipe(fs.createWriteStream("./public/" + data.blogImage))
+      //     .on("error", function (error) {
+      //       console.log("error");
+      //       response.status(500).end();
+      //     })
+      //     .on("end", function () {
+      //       console.log("done!");
+      //       //response.send("time.jpg");
+      //       //response.end();
+      //       //next(response);
+      //       //next(response);
+      //     });
+      // });
     } catch (error) {
       console.log(error);
     }
@@ -93,14 +93,29 @@ handler.post(
           })
           .on("finish", function () {
             console.log("Successfully save file !");
+            //retrieve the image and save in local dir
+            request.bucket
+              .openDownloadStreamByName(encyfilename)
+              .pipe(fs.createWriteStream("./public/" + encyfilename))
+              .on("error", function (error) {
+                console.log("error");
+                response.status(500).end();
+              })
+              .on("end", function () {
+                console.log("done!");
+              });
             response.statusCode = 200;
-            response.json({ message: "store file in database" });
-            response.end("ok");
+            response.json({
+              style: "success",
+              message: "successfully saved data",
+              status: "Success",
+            });
           });
       } else {
         return response.json({
-          status: "error",
-          message: "invalid file input",
+          style: "danger",
+          status: "Failed",
+          message: `${file} is not valid file. check file path`,
         });
 
         //throw new Error(`${file} is not valid file. check file path`);
@@ -111,7 +126,7 @@ handler.post(
     } catch (error) {
       console.log("Error on Invalid File :" + error);
       response.statusCode = 404;
-      return response.json({ status: "error", message: "invalid file input" });
+      return response.json({ status: "danger", message: error });
     }
   }
 );

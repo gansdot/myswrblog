@@ -9,6 +9,7 @@ const HomeImage = ({ blog }: { blog: Blog }) => {
         width={220}
         height={145}
         alt="220x145"
+        className="img-fluid"
         src={blog === null ? "holder.js/220x145" : blog?.blogImage}
       />
       <Figure.Caption className="mt-0">

@@ -22,25 +22,6 @@ handler.get(async (request: BlogApiRequest, response: BlogApiResponse) => {
       .sort({ postedOn: -1 })
       //.limit(5)
       .toArray();
-
-    //extract image file
-    result.map((data: Blog) => {
-      if (!data.isBinary) {
-        request.bucket
-          .openDownloadStreamByName(data.blogImage)
-          .pipe(fs.createWriteStream("./public/" + data.blogImage))
-          .on("error", function (error) {
-            console.log("error");
-            response.status(500).end();
-          })
-          .on("end", function () {
-            console.log("done!");
-            //response.send("time.jpg");
-            //response.end();
-            //next(response);
-          });
-      }
-    });
   } catch (error) {
     console.log(error);
   }
@@ -62,7 +43,7 @@ handler.post(async (request: BlogApiRequest, response: BlogApiResponse) => {
     console.log("Blog Sequence Id    => " + blogsequence);
     //const encyfilename = blogsequence + "_" + filename;
     //save the blog data
-    doc.postedOn = new Date();
+    doc.postedOn = new Date().toLocaleDateString();
     doc.id = blogsequence;
     //doc.blogImage = encyfilename;
     console.log("Posted on date      => " + doc.postedOn);

@@ -4,24 +4,22 @@ import { Container } from "react-bootstrap";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Avatar from "react-avatar";
-import Figure from "react-bootstrap/Figure";
 import Link from "next/link";
 import "../../../css/styles.css";
 import useSWR from "swr";
 import { Blog, PostProps } from "../../api/blogtype";
-
-const url = "http://localhost:3000/api/";
+import Moment from "moment";
+import BlogSpinner from "../../../components/spinner";
 
 const Index = () => {
   const router = useRouter();
   let { id } = router.query;
   let content = { __html: {} };
 
-  console.log("this is id " + JSON.stringify(router.query));
+  const { data, error } = useSWR("/api/blogs");
+  console.log("data " + data);
+  if (!data) return <BlogSpinner />;
 
-  const { data, error } = useSWR(url + "blogs");
-
-  if (!data) return <div>Loading...</div>;
   if (error) return <div>Error..{error}</div>;
   return <DisplayPost id={+id} blog={data} />;
 };
@@ -55,7 +53,12 @@ const DisplayPost: FC<PostProps> = ({ id, blog }) => {
               </Col>
             </Row>
             <Row>
-              <img width={600} height={390} src={"/" + sb?.blogImage} />
+              <img
+                width={600}
+                height={390}
+                src={"/" + sb?.blogImage}
+                className="img-fluid"
+              />
             </Row>
             <Row>
               <div
@@ -80,7 +83,7 @@ const DisplayPost: FC<PostProps> = ({ id, blog }) => {
               <div style={{ height: "60px" }}></div>
             </Row>
             <Row>
-              <div style={{ paddingLeft: "32px" }}>
+              <div style={{ paddingLeft: "34px", paddingBottom: "20px" }}>
                 <span className="d-block pl-5 pr-5 bg-dark text-white">
                   More from <br></br> CodeGans
                 </span>
@@ -90,21 +93,24 @@ const DisplayPost: FC<PostProps> = ({ id, blog }) => {
             <Row>
               <div className="main">
                 {blog?.map((b, index) => (
-                  <>
-                    <div className="sideBarHeading" key={b.id}>
-                      {/* <div>{b.blogTitle.substring(0, 13)}</div> */}
-                      <div>
-                        <Link
-                          key={index}
-                          href="/post/[id]"
-                          as={`/post/${b.id}`}
-                        >
-                          <a>{b.blogTitle.substring(0, 15)}</a>
-                        </Link>
-                      </div>
-                      <img src={"/" + b.blogImage} width="60px" height="40px" />
+                  <div className="sideBarHeading" key={b.id}>
+                    <img
+                      //key={index}
+                      src={"/" + b.blogImage}
+                      width="60px"
+                      height="40px"
+                    />
+
+                    <div>
+                      <Link
+                        key={b.blogImage}
+                        href="/post/[id]"
+                        as={`/post/${b.id}`}
+                      >
+                        <a>{b.blogTitle.substring(0, 15)}</a>
+                      </Link>
                     </div>
-                  </>
+                  </div>
                 ))}
               </div>
             </Row>

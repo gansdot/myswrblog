@@ -42,3 +42,11 @@ export interface BlogApiRequest extends NextApiRequest {
   dbClient: MongoClient;
 }
 export interface BlogApiResponse extends NextApiResponse {}
+
+type errStatus = "primary" | "danger" | "success" | "danger" | "warning";
+
+export type Status = {
+  style: errStatus;
+  message: string;
+  status: string;
+};
